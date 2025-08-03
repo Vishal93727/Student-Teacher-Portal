@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const AssignmentManagement = () => {
+const Assignment = () => {
   const [assignments, setAssignments] = useState([]);
   const [students, setStudents] = useState([]);
   const [submissions, setSubmissions] = useState([]);
@@ -646,4 +646,4 @@ const AssignmentManagement = () => {
   );
 };
 
-export default AssignmentManagement;
+export default Assignment;

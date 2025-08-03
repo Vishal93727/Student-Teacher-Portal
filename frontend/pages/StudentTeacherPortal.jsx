@@ -5,6 +5,7 @@ import StudentDashboard from './StudentDashboard';
 import TeacherDashboard from './TeacherDashboard';
 import TestBuilder from './TestBuilder';
 import ComingSoon from './ComingSoon';
+import Assignment from '../pages/Assignment';
 
 import { mockAssignments, mockTests, mockStudents, mockSubmissions } from '../data/mockData';
 import '../styles/styles.css';
@@ -13,6 +14,8 @@ const StudentTeacherPortal = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentView, setCurrentView] = useState('login');
   const [assignments, setAssignments] = useState([]);
+    const [createAssignments, setCreateAssignments] = useState([]);
+
   const [tests, setTests] = useState([]);
   const [students, setStudents] = useState([]);
   const [submissions, setSubmissions] = useState([]);
@@ -47,6 +50,7 @@ const StudentTeacherPortal = () => {
             tests={tests}
             students={students}
             submissions={submissions}
+            createAssignments={createAssignments}
           />
         ) : (
           <StudentDashboard
@@ -57,7 +61,9 @@ const StudentTeacherPortal = () => {
         );
       case 'test-builder':
         return currentUser.role === 'teacher' ? <TestBuilder /> : <div>Access Denied</div>;
-      default:
+      case 'create-assignment':
+        return currentUser.role === 'teacher' ? <Assignment /> : <div>Access Denied</div>;
+        default:
         return <ComingSoon />;
     }
   };

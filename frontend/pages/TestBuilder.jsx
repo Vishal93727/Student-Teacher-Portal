@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 // Test Builder Component
   const TestBuilder = () => {
     const [test, setTest] = useState({
@@ -14,7 +16,7 @@
       options: ['', ''],
       correctAnswer: '',
       points: 1
-    });
+    }); 
 
     const questionTypes = [
       { value: 'multiple-choice', label: 'Multiple Choice', icon: '⚪' },

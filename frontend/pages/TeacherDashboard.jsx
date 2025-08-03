@@ -1,3 +1,4 @@
+import Assignment from '../pages/Assignment';
 const TeacherDashboard = ({ assignments, tests, submissions, students, currentUser }) => {
   const stats = [
     { title: 'Active Tests', value: tests.filter(t => t.status === 'Published').length, icon: '📋', color: 'green' },

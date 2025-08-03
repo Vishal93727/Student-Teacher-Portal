@@ -7,6 +7,7 @@ const Navigation = ({ currentUser, currentView, setCurrentView, handleLogout, is
         { id: 'assignments', label: 'Assignments', icon: '📝' },
         { id: 'tests', label: 'Tests', icon: '📋' },
         { id: 'test-builder', label: 'Create Test', icon: '🧪' },
+        { id: 'create-assignment', label: 'Create Assignment', icon: '📝' },
         { id: 'students', label: 'Students', icon: '👥' },
         { id: 'submissions', label: 'Submissions', icon: '📤' }
       ]
