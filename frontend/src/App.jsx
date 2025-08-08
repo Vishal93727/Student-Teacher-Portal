@@ -6,7 +6,6 @@ import '../styles/styles.css'
 import StudentTeacherPortal from '../pages/StudentTeacherPortal';
 import Footer from '../components/Footer'
 
-
 import Register from '../components/Register';
 
 function App() {

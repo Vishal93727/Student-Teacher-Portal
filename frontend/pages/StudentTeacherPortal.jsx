@@ -7,6 +7,7 @@ import TestBuilder from './TestBuilder';
 import ComingSoon from './ComingSoon';
 import Assignment from '../pages/Assignment';
 import Register from '../components/Register';
+import Navbar from '../components/Navbar'
 
 import { mockAssignments, mockTests, mockStudents, mockSubmissions } from '../data/mockData';
 import '../styles/styles.css';
@@ -41,7 +42,10 @@ const StudentTeacherPortal = () => {
   };
 
   const renderCurrentView = () => {
-    if (!currentUser) return <LoginComponent onLogin={handleLogin} />;
+    if (!currentUser) return (<>
+      <Navbar/>
+    <LoginComponent onLogin={handleLogin} />
+    </>);
     
     switch (currentView) {
      

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Re.css'
+import { useNavigate } from 'react-router-dom';
 
 // Mock data for dropdowns
 const BRANCHES = [
@@ -243,9 +244,9 @@ const StudentRegistration = ({ onRegistrationSuccess }) => {
       const result = await ApiService.registerStudent(formData);
       if (result.success) {
         alert('Registration successful!');
-        if (onRegistrationSuccess) {
-          onRegistrationSuccess(result.student);
-        }
+        // if (onRegistrationSuccess) {
+        //   onRegistrationSuccess(result.student);
+        // }
       }
     } catch (error) {
       alert('Registration failed. Please try again.');
@@ -629,6 +630,121 @@ case 3:
               </div>
             </div>
           )}
+        </div>
+      </div>
+    </div>
+  );
+case 4:
+  return (
+    <div className="family-section">
+      <h3 className="section-title">Family Details</h3>
+
+      <div className="form-grid">
+        <div>
+          <label className="form-label">Father's Name *</label>
+          <input
+            type="text"
+            value={formData.fatherName}
+            onChange={(e) => handleInputChange('fatherName', e.target.value)}
+            className={`form-input ${errors.fatherName ? 'input-error' : ''}`}
+            placeholder="Enter father's name"
+          />
+          {errors.fatherName && <p className="error-text">{errors.fatherName}</p>}
+        </div>
+
+        <div>
+          <label className="form-label">Mother's Name *</label>
+          <input
+            type="text"
+            value={formData.motherName}
+            onChange={(e) => handleInputChange('motherName', e.target.value)}
+            className={`form-input ${errors.motherName ? 'input-error' : ''}`}
+            placeholder="Enter mother's name"
+          />
+          {errors.motherName && <p className="error-text">{errors.motherName}</p>}
+        </div>
+
+        <div>
+          <label className="form-label">Guardian Name (if different)</label>
+          <input
+            type="text"
+            value={formData.guardianName}
+            onChange={(e) => handleInputChange('guardianName', e.target.value)}
+            className="form-input"
+            placeholder="Enter guardian's name"
+          />
+        </div>
+
+        <div>
+          <label className="form-label">Parent/Guardian Phone *</label>
+          <input
+            type="tel"
+            value={formData.parentPhone}
+            onChange={(e) => handleInputChange('parentPhone', e.target.value)}
+            className={`form-input ${errors.parentPhone ? 'input-error' : ''}`}
+            placeholder="Enter parent/guardian phone"
+          />
+          {errors.parentPhone && <p className="error-text">{errors.parentPhone}</p>}
+        </div>
+
+        <div>
+          <label className="form-label">Parent Email</label>
+          <input
+            type="email"
+            value={formData.parentEmail}
+            onChange={(e) => handleInputChange('parentEmail', e.target.value)}
+            className="form-input"
+            placeholder="Enter parent email"
+          />
+        </div>
+
+        <div>
+          <label className="form-label">Parent Occupation</label>
+          <input
+            type="text"
+            value={formData.parentOccupation}
+            onChange={(e) => handleInputChange('parentOccupation', e.target.value)}
+            className="form-input"
+            placeholder="Enter parent occupation"
+          />
+        </div>
+      </div>
+
+      <div className="emergency-box">
+        <h4 className="sub-title">Emergency Contact</h4>
+        <div className="form-grid-three">
+          <div>
+            <label className="form-label">Contact Name</label>
+            <input
+              type="text"
+              value={formData.emergencyContact.name}
+              onChange={(e) => handleInputChange('name', e.target.value, 'emergencyContact')}
+              className="form-input"
+              placeholder="Emergency contact name"
+            />
+          </div>
+
+          <div>
+            <label className="form-label">Relation</label>
+            <input
+              type="text"
+              value={formData.emergencyContact.relation}
+              onChange={(e) => handleInputChange('relation', e.target.value, 'emergencyContact')}
+              className="form-input"
+              placeholder="Relation"
+            />
+          </div>
+
+          <div>
+            <label className="form-label">Phone Number</label>
+            <input
+              type="tel"
+              value={formData.emergencyContact.phone}
+              onChange={(e) => handleInputChange('phone', e.target.value, 'emergencyContact')}
+              className="form-input"
+              placeholder="Emergency contact phone"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -1060,7 +1176,12 @@ return (
 
 const RegistrationSystem = () => {
   const [currentView, setCurrentView] = useState('register');
+  const navigate = useNavigate();
 
+const handlelogin = (e) => {
+    e.preventDefault();
+    navigate('/');
+  };
   return (
     <div className="app-container">
       {/* Navigation */}
@@ -1084,6 +1205,12 @@ const RegistrationSystem = () => {
             >
               Teacher Dashboard
             </button>
+             <button
+              onClick={handlelogin}
+              className={`nav-button `}
+            >
+              Login
+            </button>
           </div>
         </div>
       </nav>
@@ -1100,6 +1227,7 @@ const RegistrationSystem = () => {
         ) : (
           <TeacherStudentFilter />
         )}
+        
       </div>
     </div>
   );
