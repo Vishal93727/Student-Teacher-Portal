@@ -6,6 +6,7 @@ import TeacherDashboard from './TeacherDashboard';
 import TestBuilder from './TestBuilder';
 import ComingSoon from './ComingSoon';
 import Assignment from '../pages/Assignment';
+import Register from '../components/Register';
 
 import { mockAssignments, mockTests, mockStudents, mockSubmissions } from '../data/mockData';
 import '../styles/styles.css';
@@ -41,6 +42,7 @@ const StudentTeacherPortal = () => {
 
   const renderCurrentView = () => {
     if (!currentUser) return <LoginComponent onLogin={handleLogin} />;
+    
     switch (currentView) {
      
       case 'dashboard':

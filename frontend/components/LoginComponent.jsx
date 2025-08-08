@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
+import Register from './Register';
 const LoginComponent = ({ onLogin }) => {
   const [formData, setFormData] = useState({ email: '', password: '', role: 'student' });
+const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,6 +16,10 @@ const LoginComponent = ({ onLogin }) => {
     onLogin(userData);
   };
 
+const handleRegister = (e) => {
+    e.preventDefault();
+    navigate('/register');
+  };
   return (
     <div className="login-container">
       <div className="login-card">
@@ -52,8 +58,17 @@ const LoginComponent = ({ onLogin }) => {
           </div>
           <button type="submit" className="login-btn">Sign In</button>
         </form>
-      </div>
+         
+      
+       <div className="login-hea">
+          <p>
+            Don’t have an account?{' '}
+            <a href="/register" onClick={handleRegister}>Sign Up</a>
+          </p>
+        </div>
     </div>
+    </div>
+   
   );
 };
 

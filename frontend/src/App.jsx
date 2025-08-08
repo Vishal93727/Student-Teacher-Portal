@@ -1,19 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import '../styles/styles.css'
 import StudentTeacherPortal from '../pages/StudentTeacherPortal';
 import Footer from '../components/Footer'
 
+
+import Register from '../components/Register';
+
 function App() {
-
-
   return (
-    <>
-    <StudentTeacherPortal/>
-    <Footer/>
-    </>
-  )
+    <Router>
+      
+      <Routes>
+        <Route path="/" element={<StudentTeacherPortal/>} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+        <Footer/>
+    </Router>
+  );
 }
-
 export default App
