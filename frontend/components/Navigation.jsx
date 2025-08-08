@@ -7,15 +7,17 @@ const Navigation = ({ currentUser, currentView, setCurrentView, handleLogout, is
         { id: 'assignments', label: 'Assignments', icon: '📝' },
         { id: 'tests', label: 'Tests', icon: '📋' },
         { id: 'test-builder', label: 'Create Test', icon: '🧪' },
-        { id: 'create-assignment', label: 'Create Assignment', icon: '📝' },
         { id: 'students', label: 'Students', icon: '👥' },
-        { id: 'submissions', label: 'Submissions', icon: '📤' }
+        {id: 'logout', label: 'Logout', icon: '🎯' },
+        { id: 'profile', label: 'Profile', icon: '👤' },
       ]
     : [
         { id: 'dashboard', label: 'Dashboard', icon: '📊' },
         { id: 'assignments', label: 'My Assignments', icon: '📝' },
         { id: 'tests', label: 'My Tests', icon: '📋' },
-        { id: 'grades', label: 'Grades', icon: '🎯' }
+        { id: 'grades', label: 'Grades', icon: '🎯' },
+        { id: 'profile', label: 'Profile', icon: '👤' },
+        { id: 'logout', label: 'Logout', icon: '🚪' },
       ];
 
   return (
@@ -41,9 +43,9 @@ const Navigation = ({ currentUser, currentView, setCurrentView, handleLogout, is
           ))}
         </div>
         <div className="nav-user">
-          <span className="user-name">{currentUser?.name}</span>
-          <span className="user-role">{currentUser?.role}</span>
-          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+          {/* <span className="user-name">{currentUser?.name}</span> */}
+          {/* <span className="user-role">{currentUser?.role}</span> */}
+          {/* <button className="logout-btn" onClick={handleLogout}>Logout</button> */}
         </div>
         <button className="mobile-menu-btn" onClick={() => toggleMobileMenu(!isMobileMenuOpen)}>
           <span></span><span></span><span></span>

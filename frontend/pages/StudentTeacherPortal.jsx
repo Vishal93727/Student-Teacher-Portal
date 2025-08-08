@@ -8,7 +8,7 @@ import ComingSoon from './ComingSoon';
 import Assignment from '../pages/Assignment';
 import Register from '../components/Register';
 import Navbar from '../components/Navbar'
-
+import TeacherStudentFilter from './TeacherStudentFilter';
 import { mockAssignments, mockTests, mockStudents, mockSubmissions } from '../data/mockData';
 import '../styles/styles.css';
 
@@ -57,18 +57,58 @@ const StudentTeacherPortal = () => {
             students={students}
             submissions={submissions}
             createAssignments={createAssignments}
+         
           />
         ) : (
           <StudentDashboard
             assignments={assignments}
             tests={tests}
             submissions={submissions.filter(sub => sub.studentName === currentUser.name)}
+          
           />
         );
       case 'test-builder':
         return currentUser.role === 'teacher' ? <TestBuilder /> : <div>Access Denied</div>;
       case 'create-assignment':
         return currentUser.role === 'teacher' ? <Assignment /> : <div>Access Denied</div>;
+      case 'register':
+        return <Register onRegistrationSuccess={handleLogin} />;
+      case 'profile':
+        return <div>Profile Page - Coming Soon</div>;
+      case 'assignments':
+        return currentUser.role === 'teacher' ? (
+          <Assignment assignments={assignments} />
+        ) : (
+          <div>My Assignments Page - Coming Soon</div>
+        );
+      case 'tests':
+        return currentUser.role === 'teacher' ? (
+          <div>Tests Page - Coming Soon</div>
+        ) : (
+          <div>My Tests Page - Coming Soon</div>
+        );
+      case 'grades':
+        return currentUser.role === 'teacher' ? (
+          <div>Grades Page - Coming Soon</div>
+        ) : (
+          <div>Grades Page - Coming Soon</div>
+        );
+      case 'submissions':
+        return currentUser.role === 'teacher' ? (
+          <div>Submissions Page - Coming Soon</div>
+        ) : (
+          <div>My Submissions Page - Coming Soon</div>
+        );
+      case 'logout':
+        handleLogout();
+        return <div>Logging out...</div>;
+      case 'coming-soon':
+        return <ComingSoon />;
+      case 'login':
+        return <LoginComponent onLogin={handleLogin} />;
+    
+      case 'students':
+        return <TeacherStudentFilter />;
         default:
         return <ComingSoon />;
     }

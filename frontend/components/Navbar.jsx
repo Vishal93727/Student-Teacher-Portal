@@ -17,7 +17,7 @@ const Navbar = () => {
     localStorage.removeItem('authToken');
     setIsLoggedIn(false);
     setMenuOpen(false);
-    navigate('/signin');
+    navigate('/');
   };
 
   const toggleMenu = () => {

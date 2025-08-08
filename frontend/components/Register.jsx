@@ -135,6 +135,7 @@ const StudentRegistration = ({ onRegistrationSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [availableDepartments, setAvailableDepartments] = useState([]);
+  const navigate = useNavigate();
 
   const steps = [
     { id: 1, title: 'Personal Information', icon: '👤' },
@@ -244,7 +245,8 @@ const StudentRegistration = ({ onRegistrationSuccess }) => {
       const result = await ApiService.registerStudent(formData);
       if (result.success) {
         alert('Registration successful!');
-        // if (onRegistrationSuccess) {
+        if (onRegistrationSuccess) return ( navigate('/') );
+        //    {
         //   onRegistrationSuccess(result.student);
         // }
       }
@@ -1200,10 +1202,10 @@ const handlelogin = (e) => {
               Student Registration
             </button>
             <button
-              onClick={() => setCurrentView('filter')}
-              className={`nav-button ${currentView === 'filter' ? 'active' : ''}`}
+              onClick={() => setCurrentView('dregister')}
+              className={`nav-button ${currentView === 'register' ? 'active' : ''}`}
             >
-              Teacher Dashboard
+              Teacher Registration
             </button>
              <button
               onClick={handlelogin}
