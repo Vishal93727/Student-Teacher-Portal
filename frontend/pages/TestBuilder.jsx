@@ -71,21 +71,43 @@ import React, { useState } from 'react';
       }
     };
 
-    const saveTest = () => {
-      if (test.title && test.questions.length > 0) {
-        const newTest = {
-          ...test,
-          id: Date.now(),
-          createdAt: new Date().toISOString(),
-          status: 'Draft'
-        };
-        setTests(prev => [...prev, newTest]);
-        alert('Test saved successfully!');
-        setCurrentView('tests');
+    // const saveTest = () => {
+    //   if (test.title && test.questions.length > 0) {
+    //     const newTest = {
+    //       ...test,
+    //       id: Date.now(),
+    //       createdAt: new Date().toISOString(),
+    //       status: 'Draft'
+    //     };
+    //     setTests(prev => [...prev, newTest]);
+    //     alert('Test saved successfully!');
+    //     setCurrentView('tests');
+    //   } else {
+    //     alert('Please add a title and at least one question.');
+    //   }
+    // };
+
+const saveTest = async () => {
+  if (test.title && test.questions.length > 0) {
+    try {
+      const response = await fetch("http://localhost:5000/api/tests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(test)
+      });
+      
+      if (response.ok) {
+        alert("✅ Test saved successfully!");
       } else {
-        alert('Please add a title and at least one question.');
+        alert("❌ Failed to save test");
       }
-    };
+    } catch (err) {
+      console.error("Error saving test:", err);
+    }
+  } else {
+    alert("Please add a title and at least one question.");
+  }
+};
 
     return (
       <div className="test-builder">

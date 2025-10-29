@@ -5,6 +5,12 @@ import StudentDashboard from './StudentDashboard';
 import TeacherDashboard from './TeacherDashboard';
 import TestBuilder from './TestBuilder';
 import ComingSoon from './ComingSoon';
+import ProfilePage from './ProfilePage';
+import StudentAssignments from './StudentAssignments';
+import TestsPage from './TestsPage';
+import GradesPage from './GradesPage';
+import SubmissionsPage from './SubmissionsPage';
+
 import Assignment from '../pages/Assignment';
 import Register from '../components/Register';
 import Navbar from '../components/Navbar'
@@ -23,17 +29,58 @@ const StudentTeacherPortal = () => {
   const [submissions, setSubmissions] = useState([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    setAssignments(mockAssignments);
-    setTests(mockTests);
-    setStudents(mockStudents);
-    setSubmissions(mockSubmissions);
-  }, []);
 
-  const handleLogin = (user) => {
-    setCurrentUser(user);
-    setCurrentView('dashboard');
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const [assignRes, testRes, subRes] = await Promise.all([
+//         fetch("http://localhost:5000/api/assignments").then(r => r.json()),
+//         fetch("http://localhost:5000/api/tests").then(r => r.json()),
+//         fetch("http://localhost:5000/api/submissions").then(r => r.json())
+//       ]);
+//       setAssignments(assignRes);
+//       setTests(testRes);
+//       setSubmissions(subRes);
+//     } catch (err) {
+//       console.error("Error loading data:", err);
+//     }
+//   };
+//   fetchData();
+// }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [assignRes, testRes, subRes] = await Promise.all([
+        fetch("http://localhost:5000/api/assignments").then(r => r.json()),
+        fetch("http://localhost:5000/api/tests").then(r => r.json()),
+        fetch("http://localhost:5000/api/submissions").then(r => r.json())
+      ]);
+
+      // ✅ Safely handle both array or wrapped object responses
+      setAssignments(Array.isArray(assignRes) ? assignRes : assignRes.assignments || []);
+      setTests(Array.isArray(testRes) ? testRes : testRes.tests || []);
+      setSubmissions(Array.isArray(subRes) ? subRes : subRes.submissions || []);
+    } catch (err) {
+      console.error("Error loading data:", err);
+    }
   };
+
+  fetchData();
+}, []);
+
+  // const handleLogin = (user) => {
+  //   setCurrentUser(user);
+  //   setCurrentView('dashboard');
+  // };
+  const handleLogin = (user) => {
+  // Map backend `id` to `_id` so dashboard works
+  const mappedUser = { ...user, _id: user.id };
+  setCurrentUser(mappedUser);
+  localStorage.setItem("user", JSON.stringify(mappedUser));
+  setCurrentView('dashboard');
+};
+
+
 
   const handleLogout = () => {
     setCurrentUser(null);
@@ -52,6 +99,7 @@ const StudentTeacherPortal = () => {
       case 'dashboard':
         return currentUser.role === 'teacher' ? (
           <TeacherDashboard
+          currentUser={currentUser}
             assignments={assignments}
             tests={tests}
             students={students}
@@ -74,30 +122,33 @@ const StudentTeacherPortal = () => {
       case 'register':
         return <Register onRegistrationSuccess={handleLogin} />;
       case 'profile':
-        return <div>Profile Page - Coming Soon</div>;
+        return currentUser ? <ProfilePage currentUser={currentUser} /> : <p>Loading...</p>;
+;// 
+  
+
       case 'assignments':
         return currentUser.role === 'teacher' ? (
           <Assignment assignments={assignments} />
         ) : (
-          <div>My Assignments Page - Coming Soon</div>
+          <div><StudentAssignments/></div>
         );
       case 'tests':
         return currentUser.role === 'teacher' ? (
           <div>Tests Page - Coming Soon</div>
         ) : (
-          <div>My Tests Page - Coming Soon</div>
+          <TestsPage/>
         );
       case 'grades':
         return currentUser.role === 'teacher' ? (
           <div>Grades Page - Coming Soon</div>
         ) : (
-          <div>Grades Page - Coming Soon</div>
+          <GradesPage/>
         );
       case 'submissions':
         return currentUser.role === 'teacher' ? (
           <div>Submissions Page - Coming Soon</div>
         ) : (
-          <div>My Submissions Page - Coming Soon</div>
+          <SubmissionsPage/>
         );
       case 'logout':
         handleLogout();
@@ -112,6 +163,57 @@ const StudentTeacherPortal = () => {
         default:
         return <ComingSoon />;
     }
+    
+    
+
+// inside renderCurrentView():
+// switch (currentView) {
+//   case 'dashboard':
+//     return currentUser.role === 'teacher' ? (
+//       <TeacherDashboard
+//         assignments={assignments}
+//         tests={tests}
+//         students={students}
+//         submissions={submissions}
+//       />
+//     ) : (
+//       <StudentDashboard
+//         assignments={assignments}
+//         tests={tests}
+//         submissions={submissions.filter(sub => sub.studentName === currentUser.name)}
+//       />
+//     );
+
+//   case 'profile':
+//     return <ProfilePage currentUser={currentUser} />;
+
+//   case 'assignments':
+//     return currentUser.role === 'teacher' ? (
+//       <Assignment assignments={assignments} />
+//     ) : (
+//       <StudentAssignments currentUser={currentUser} />
+//     );
+
+//   case 'tests':
+//     return <TestsPage />;
+
+//   case 'grades':
+//     return <GradesPage currentUser={currentUser} />;
+
+//   case 'submissions':
+//     return <SubmissionsPage currentUser={currentUser} />;
+
+//   case 'students':
+//     return <TeacherStudentFilter />;
+
+//   case 'logout':
+//     handleLogout();
+//     return <div>Logging out...</div>;
+
+//   default:
+//     return <ProfilePage currentUser={currentUser} />;
+// }
+
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { fetchAssignments, createAssignment, updateAssignment, deleteAssignment } from "../services/api";
 const Assignment = () => {
   const [assignments, setAssignments] = useState([]);
   const [students, setStudents] = useState([]);
@@ -13,109 +13,125 @@ const Assignment = () => {
   const [itemsPerPage] = useState(6);
 
   // Mock data initialization
-  useEffect(() => {
-    setAssignments([
-      {
-        id: 1,
-        title: 'Mathematics Assignment 1',
-        description: 'Solve algebraic equations and graph functions',
-        subject: 'Mathematics',
-        dueDate: '2025-08-15',
-        createdDate: '2025-07-20',
-        status: 'Active',
-        totalMarks: 100,
-        submissionType: 'file',
-        instructions: 'Upload your solutions in PDF format. Show all work clearly.',
-        attachments: ['sample_problems.pdf']
-      },
-      {
-        id: 2,
-        title: 'Science Project - Solar System',
-        description: 'Create a detailed presentation about planets',
-        subject: 'Science',
-        dueDate: '2025-08-20',
-        createdDate: '2025-07-25',
-        status: 'Active',
-        totalMarks: 150,
-        submissionType: 'file',
-        instructions: 'Create a PowerPoint presentation with at least 15 slides.',
-        attachments: []
-      },
-      {
-        id: 3,
-        title: 'History Essay - World War II',
-        description: 'Write an essay on the impact of WWII',
-        subject: 'History',
-        dueDate: '2025-08-25',
-        createdDate: '2025-08-01',
-        status: 'Draft',
-        totalMarks: 75,
-        submissionType: 'text',
-        instructions: 'Write a 1000-word essay analyzing the social and economic impacts.',
-        attachments: ['reference_materials.pdf']
-      },
-      {
-        id: 4,
-        title: 'English Literature Review',
-        description: 'Analyze themes in Shakespeare plays',
-        subject: 'English',
-        dueDate: '2025-09-01',
-        createdDate: '2025-08-05',
-        status: 'Active',
-        totalMarks: 80,
-        submissionType: 'text',
-        instructions: 'Focus on character development and thematic elements.',
-        attachments: []
-      }
-    ]);
+  // useEffect(() => {
+  //   setAssignments([
+  //     {
+  //       id: 1,
+  //       title: 'Mathematics Assignment 1',
+  //       description: 'Solve algebraic equations and graph functions',
+  //       subject: 'Mathematics',
+  //       dueDate: '2025-08-15',
+  //       createdDate: '2025-07-20',
+  //       status: 'Active',
+  //       totalMarks: 100,
+  //       submissionType: 'file',
+  //       instructions: 'Upload your solutions in PDF format. Show all work clearly.',
+  //       attachments: ['sample_problems.pdf']
+  //     },
+  //     {
+  //       id: 2,
+  //       title: 'Science Project - Solar System',
+  //       description: 'Create a detailed presentation about planets',
+  //       subject: 'Science',
+  //       dueDate: '2025-08-20',
+  //       createdDate: '2025-07-25',
+  //       status: 'Active',
+  //       totalMarks: 150,
+  //       submissionType: 'file',
+  //       instructions: 'Create a PowerPoint presentation with at least 15 slides.',
+  //       attachments: []
+  //     },
+  //     {
+  //       id: 3,
+  //       title: 'History Essay - World War II',
+  //       description: 'Write an essay on the impact of WWII',
+  //       subject: 'History',
+  //       dueDate: '2025-08-25',
+  //       createdDate: '2025-08-01',
+  //       status: 'Draft',
+  //       totalMarks: 75,
+  //       submissionType: 'text',
+  //       instructions: 'Write a 1000-word essay analyzing the social and economic impacts.',
+  //       attachments: ['reference_materials.pdf']
+  //     },
+  //     {
+  //       id: 4,
+  //       title: 'English Literature Review',
+  //       description: 'Analyze themes in Shakespeare plays',
+  //       subject: 'English',
+  //       dueDate: '2025-09-01',
+  //       createdDate: '2025-08-05',
+  //       status: 'Active',
+  //       totalMarks: 80,
+  //       submissionType: 'text',
+  //       instructions: 'Focus on character development and thematic elements.',
+  //       attachments: []
+  //     }
+  //   ]);
 
-    setStudents([
-      { id: 1, name: 'John Doe', email: 'john@student.com', rollNumber: 'S001' },
-      { id: 2, name: 'Jane Smith', email: 'jane@student.com', rollNumber: 'S002' },
-      { id: 3, name: 'Mike Johnson', email: 'mike@student.com', rollNumber: 'S003' },
-      { id: 4, name: 'Sarah Wilson', email: 'sarah@student.com', rollNumber: 'S004' },
-      { id: 5, name: 'Tom Brown', email: 'tom@student.com', rollNumber: 'S005' }
-    ]);
+  //   setStudents([
+  //     { id: 1, name: 'John Doe', email: 'john@student.com', rollNumber: 'S001' },
+  //     { id: 2, name: 'Jane Smith', email: 'jane@student.com', rollNumber: 'S002' },
+  //     { id: 3, name: 'Mike Johnson', email: 'mike@student.com', rollNumber: 'S003' },
+  //     { id: 4, name: 'Sarah Wilson', email: 'sarah@student.com', rollNumber: 'S004' },
+  //     { id: 5, name: 'Tom Brown', email: 'tom@student.com', rollNumber: 'S005' }
+  //   ]);
 
-    setSubmissions([
-      {
-        id: 1,
-        assignmentId: 1,
-        studentId: 1,
-        studentName: 'John Doe',
-        submittedAt: '2025-08-10T10:30:00',
-        status: 'Submitted',
-        grade: null,
-        feedback: '',
-        fileName: 'john_math_assignment.pdf',
-        fileSize: '2.3 MB'
-      },
-      {
-        id: 2,
-        assignmentId: 1,
-        studentId: 2,
-        studentName: 'Jane Smith',
-        submittedAt: '2025-08-12T14:15:00',
-        status: 'Graded',
-        grade: 85,
-        feedback: 'Good work! Minor calculation errors in problem 3.',
-        fileName: 'jane_math_assignment.pdf',
-        fileSize: '1.8 MB'
-      },
-      {
-        id: 3,
-        assignmentId: 2,
-        studentId: 1,
-        studentName: 'John Doe',
-        submittedAt: '2025-08-18T09:45:00',
-        status: 'Late',
-        grade: null,
-        feedback: '',
-        fileName: 'john_science_project.pptx',
-        fileSize: '15.2 MB'
-      }
-    ]);
-  }, []);
+  //   setSubmissions([
+  //     {
+  //       id: 1,
+  //       assignmentId: 1,
+  //       studentId: 1,
+  //       studentName: 'John Doe',
+  //       submittedAt: '2025-08-10T10:30:00',
+  //       status: 'Submitted',
+  //       grade: null,
+  //       feedback: '',
+  //       fileName: 'john_math_assignment.pdf',
+  //       fileSize: '2.3 MB'
+  //     },
+  //     {
+  //       id: 2,
+  //       assignmentId: 1,
+  //       studentId: 2,
+  //       studentName: 'Jane Smith',
+  //       submittedAt: '2025-08-12T14:15:00',
+  //       status: 'Graded',
+  //       grade: 85,
+  //       feedback: 'Good work! Minor calculation errors in problem 3.',
+  //       fileName: 'jane_math_assignment.pdf',
+  //       fileSize: '1.8 MB'
+  //     },
+  //     {
+  //       id: 3,
+  //       assignmentId: 2,
+  //       studentId: 1,
+  //       studentName: 'John Doe',
+  //       submittedAt: '2025-08-18T09:45:00',
+  //       status: 'Late',
+  //       grade: null,
+  //       feedback: '',
+  //       fileName: 'john_science_project.pptx',
+  //       fileSize: '15.2 MB'
+  //     }
+  //   ]);
+  // }, []);
+
+
+useEffect(() => {
+  const loadAssignments = async () => {
+    try {
+      const res = await fetchAssignments();
+      setAssignments(res.data);
+    } catch (err) {
+      console.error("Error fetching assignments:", err);
+    }
+  };
+  loadAssignments();
+}, []);
+
+
+
 
   // Assignment Form Component
   const AssignmentForm = ({ assignment, onSave, onCancel }) => {
@@ -134,16 +150,32 @@ const Assignment = () => {
 
     const subjects = ['Mathematics', 'Science', 'History', 'English', 'Physics', 'Chemistry', 'Biology'];
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      const newAssignment = {
-        ...formData,
-        id: assignment?.id || Date.now(),
-        createdDate: assignment?.createdDate || new Date().toISOString().split('T')[0],
-        attachments: attachments.map(file => file.name)
-      };
-      onSave(newAssignment);
-    };
+    // const handleSubmit = (e) => {
+    //   e.preventDefault();
+    //   const newAssignment = {
+    //     ...formData,
+    //     id: assignment?.id || Date.now(),
+    //     createdDate: assignment?.createdDate || new Date().toISOString().split('T')[0],
+    //     attachments: attachments.map(file => file.name)
+    //   };
+    //   onSave(newAssignment);
+    // };
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const newAssignment = {
+    title: formData.title,
+    description: formData.description,
+    subject: formData.subject,
+    dueDate: formData.dueDate,
+    totalMarks: formData.totalMarks,
+    submissionType: formData.submissionType,
+    instructions: formData.instructions,
+    status: formData.status,
+  };
+
+  onSave(newAssignment, attachments);
+};
 
     const handleFileUpload = (e) => {
       const files = Array.from(e.target.files);
@@ -415,7 +447,15 @@ const Assignment = () => {
                 <div className="action-buttons">
                   <button className="view-btn">👁️</button>
                   <button className="grade-btn">✏️</button>
-                  <button className="download-btn">⬇️</button>
+<a
+  href={`http://localhost:5000/uploads/${attachment}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="download-btn"
+>
+  ⬇️ Download
+</a>
+
                 </div>
               </div>
             ))}
@@ -580,28 +620,72 @@ const Assignment = () => {
   };
 
   // Event Handlers
-  const handleSaveAssignment = (assignmentData) => {
-    if (selectedAssignment) {
-      // Update existing assignment
-      setAssignments(prev => prev.map(a => 
-        a.id === selectedAssignment.id ? assignmentData : a
-      ));
-    } else {
-      // Create new assignment
-      setAssignments(prev => [...prev, assignmentData]);
-    }
-    setCurrentView('list');
-    setSelectedAssignment(null);
-  };
+  // const handleSaveAssignment = (assignmentData) => {
+  //   if (selectedAssignment) {
+  //     // Update existing assignment
+  //     setAssignments(prev => prev.map(a => 
+  //       a.id === selectedAssignment.id ? assignmentData : a
+  //     ));
+  //   } else {
+  //     // Create new assignment
+  //     setAssignments(prev => [...prev, assignmentData]);
+  //   }
+  //   setCurrentView('list');
+  //   setSelectedAssignment(null);
+  // };
 
-  const handleDeleteAssignment = (assignmentId) => {
-    if (window.confirm('Are you sure you want to delete this assignment?')) {
-      setAssignments(prev => prev.filter(a => a.id !== assignmentId));
-      if (currentView === 'details') {
-        setCurrentView('list');
-      }
+
+const handleSaveAssignment = async (assignmentData, files = []) => {
+  try {
+    const formData = new FormData();
+    Object.entries(assignmentData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    if (files.length > 0) {
+      files.forEach(file => formData.append("attachments", file));
     }
-  };
+
+    let response;
+    if (selectedAssignment) {
+      // Update existing
+      response = await updateAssignment(selectedAssignment._id, formData);
+      setAssignments(prev =>
+        prev.map(a => (a._id === selectedAssignment._id ? response.data : a))
+      );
+    } else {
+      // Create new
+      response = await createAssignment(formData);
+      setAssignments(prev => [response.data, ...prev]);
+    }
+
+    setCurrentView("list");
+    setSelectedAssignment(null);
+  } catch (error) {
+    console.error("Error saving assignment:", error);
+  }
+};
+
+
+  // const handleDeleteAssignment = (assignmentId) => {
+  //   if (window.confirm('Are you sure you want to delete this assignment?')) {
+  //     setAssignments(prev => prev.filter(a => a.id !== assignmentId));
+  //     if (currentView === 'details') {
+  //       setCurrentView('list');
+  //     }
+  //   }
+  // };
+const handleDeleteAssignment = async (assignmentId) => {
+  if (!window.confirm("Are you sure you want to delete this assignment?")) return;
+
+  try {
+    await deleteAssignment(assignmentId);
+    setAssignments(prev => prev.filter(a => a._id !== assignmentId));
+    if (currentView === "details") setCurrentView("list");
+  } catch (err) {
+    console.error("Error deleting assignment:", err);
+  }
+};
 
   // Render current view
   const renderCurrentView = () => {

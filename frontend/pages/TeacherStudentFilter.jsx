@@ -30,49 +30,74 @@ const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 const SEMESTERS = ['1st Semester', '2nd Semester'];
 
 // Mock API Service
+// const ApiService = {
+//   async registerStudent(studentData) {
+//     await new Promise(resolve => setTimeout(resolve, 1000));
+//     const newStudent = {
+//       id: Date.now(),
+//       ...studentData,
+//       registeredAt: new Date().toISOString()
+//     };
+    
+//     const students = JSON.parse(localStorage.getItem('students') || '[]');
+//     students.push(newStudent);
+//     localStorage.setItem('students', JSON.stringify(students));
+    
+//     return { success: true, student: newStudent };
+//   },
+
+//   async getStudentsByFilter(filters) {
+//     await new Promise(resolve => setTimeout(resolve, 500));
+//     const students = JSON.parse(localStorage.getItem('students') || '[]');
+    
+//     let filteredStudents = students;
+    
+//     if (filters.branch) {
+//       filteredStudents = filteredStudents.filter(s => s.branch === filters.branch);
+//     }
+//     if (filters.department) {
+//       filteredStudents = filteredStudents.filter(s => s.department === filters.department);
+//     }
+//     if (filters.year) {
+//       filteredStudents = filteredStudents.filter(s => s.year === filters.year);
+//     }
+//     if (filters.semester) {
+//       filteredStudents = filteredStudents.filter(s => s.semester === filters.semester);
+//     }
+    
+//     return filteredStudents;
+//   },
+
+//   async getAllStudents() {
+//     await new Promise(resolve => setTimeout(resolve, 300));
+//     return JSON.parse(localStorage.getItem('students') || '[]');
+//   }
+// };
+
+
 const ApiService = {
   async registerStudent(studentData) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const newStudent = {
-      id: Date.now(),
-      ...studentData,
-      registeredAt: new Date().toISOString()
-    };
-    
-    const students = JSON.parse(localStorage.getItem('students') || '[]');
-    students.push(newStudent);
-    localStorage.setItem('students', JSON.stringify(students));
-    
-    return { success: true, student: newStudent };
-  },
-
-  async getStudentsByFilter(filters) {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const students = JSON.parse(localStorage.getItem('students') || '[]');
-    
-    let filteredStudents = students;
-    
-    if (filters.branch) {
-      filteredStudents = filteredStudents.filter(s => s.branch === filters.branch);
-    }
-    if (filters.department) {
-      filteredStudents = filteredStudents.filter(s => s.department === filters.department);
-    }
-    if (filters.year) {
-      filteredStudents = filteredStudents.filter(s => s.year === filters.year);
-    }
-    if (filters.semester) {
-      filteredStudents = filteredStudents.filter(s => s.semester === filters.semester);
-    }
-    
-    return filteredStudents;
+    const res = await fetch("http://localhost:5000/api/students", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(studentData),
+    });
+    return await res.json();
   },
 
   async getAllStudents() {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return JSON.parse(localStorage.getItem('students') || '[]');
-  }
+    const res = await fetch("http://localhost:5000/api/students");
+    return await res.json();
+  },
+
+  async getStudentsByFilter(filters) {
+    const query = new URLSearchParams(filters).toString();
+    const res = await fetch(`http://localhost:5000/api/students/filter?${query}`);
+    return await res.json();
+  },
 };
+
+
 // Teacher Student Filter Component
 const TeacherStudentFilter = () => {
   const [filters, setFilters] = useState({
